@@ -1,27 +1,22 @@
-version: '3.7'
+version: "2.1"
 
 services:
 
-  cells:
-    image: pydio/cells:latest
-    restart: unless-stopped
-    ports:
-      - "8200:8080"
+  pydio-cells:
+    image: lscr.io/linuxserver/pydio-cells
+    container_name: pydio-cells
+    hostname: pydio-cells
     environment:
-      - CELLS_INSTALL_YAML=/pydio/config/install.yml
-    volumes: 
-      - ./cellsdir:/var/cells
-      - ./install-conf.yml:/pydio/config/install.yml:ro
-
-  mysql:
-    image: mariadb
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ChangeMe!
-      MYSQL_DATABASE: cells
-      MYSQL_USER: pydio
-      MYSQL_PASSWORD: ChangeMe!
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - EXTERNALURL=yourdomain.url
+      - SERVER_IP=0.0.0.0 #optional
     volumes:
-      - ./mysqldir:/var/lib/mysql
-
-
+      - /path/to/appdata/config:/config
+    ports:
+      - 8080:8080
+      - 33060:33060 #optional
+    restart: unless-stopped
+    
+    
